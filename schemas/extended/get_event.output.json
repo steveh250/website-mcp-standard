@@ -11,13 +11,16 @@
     "status": {
       "type": "string",
       "enum": [
-        "scheduled",
-        "postponed",
-        "rescheduled",
-        "cancelled",
-        "sold_out",
-        "completed"
-      ]
+        "ok",
+        "not_found",
+        "invalid_request",
+        "unauthorized",
+        "forbidden",
+        "rate_limited",
+        "unavailable",
+        "internal_error"
+      ],
+      "description": "Outcome of the call. See SPECIFICATION.md section 10."
     },
     "error": {
       "$ref": "#/$defs/error"
@@ -38,15 +41,29 @@
     "start": {
       "type": "string",
       "format": "date-time",
-      "description": "RFC 3339 with offset."
+      "description": "RFC 3339 with offset.",
+      "pattern": "(?:[Zz]|[+-][0-9]{2}:[0-9]{2})(?![\\s\\S])"
     },
     "end": {
       "type": "string",
-      "format": "date-time"
+      "format": "date-time",
+      "pattern": "(?:[Zz]|[+-][0-9]{2}:[0-9]{2})(?![\\s\\S])"
     },
     "timezone": {
       "type": "string",
       "description": "IANA time zone, e.g. America/Vancouver."
+    },
+    "event_status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "postponed",
+        "rescheduled",
+        "cancelled",
+        "sold_out",
+        "completed"
+      ],
+      "description": "Event lifecycle, independent of the call outcome."
     },
     "location": {
       "type": "object",
@@ -144,7 +161,9 @@
           "id",
           "name",
           "url",
-          "start"
+          "start",
+          "content",
+          "content_format"
         ]
       }
     },
