@@ -36,7 +36,12 @@ def main():
     failures = 0
     outputs = {}
     for path in sorted(SCHEMAS.rglob("*.json")):
-        schema = load(path)
+        try:
+            schema = load(path)
+        except ValueError as exc:  # includes json.JSONDecodeError
+            failures += 1
+            print(f"FAIL {path.relative_to(ROOT)}: {exc}")
+            continue
         Draft202012Validator.check_schema(schema)
         if path.name.endswith(".output.json"):
             outputs[path.name[: -len(".output.json")]] = schema
@@ -48,8 +53,14 @@ def main():
         if schema is None:
             print(f"SKIP {rel}: no output schema for '{tool}'")
             continue
+        try:
+            instance = load(path)
+        except ValueError as exc:  # includes json.JSONDecodeError
+            failures += 1
+            print(f"FAIL {rel}: {exc}")
+            continue
         validator = Draft202012Validator(schema, format_checker=FormatChecker())
-        errors = sorted(validator.iter_errors(load(path)), key=lambda e: list(e.path))
+        errors = sorted(validator.iter_errors(instance), key=lambda e: list(e.path))
         if errors:
             failures += 1
             print(f"FAIL {rel}")

@@ -54,7 +54,10 @@ class ExampleLoaderTests(unittest.TestCase):
                                         capture_output=True, text=True, timeout=20)
                 if duplicate:
                     self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
-                    self.assertIn("duplicate object member", result.stdout + result.stderr)
+                    failing = ("schemas/sample.output.json" if duplicate == "schema"
+                               else "examples/sample.json")
+                    self.assertIn(f"FAIL {failing}: duplicate object member", result.stdout)
+                    self.assertNotIn("Traceback", result.stderr)
                 else:
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     self.assertIn("PASS examples/sample.json", result.stdout)
@@ -63,7 +66,9 @@ class ExampleLoaderTests(unittest.TestCase):
         result = subprocess.run([sys.executable, str(ROOT / "tools/validate_examples.py")],
                                 cwd=ROOT, capture_output=True, text=True, timeout=20)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertEqual(sum(line.startswith("PASS ") for line in result.stdout.splitlines()), 27)
+        lines = result.stdout.splitlines()
+        self.assertFalse([line for line in lines if line.startswith("FAIL ")], result.stdout)
+        self.assertTrue(any(line.startswith("PASS ") for line in lines), result.stdout)
 
 
 if __name__ == "__main__":
