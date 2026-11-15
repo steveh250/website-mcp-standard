@@ -731,6 +731,8 @@ The summary MUST be accurate and complete enough for the user to make an informe
 
 A conformance checker takes a hostname, runs the checks for each declared level, and produces a report. It MUST NOT perform any real transaction. Transactional checks use only error paths and `test: true` types.
 
+*(Informative)* A reference checker is in [`tools/conformance/`](tools/conformance/). It runs the Core checks, and the Extended checks for each declared module. For the Transactional level it checks only tool presence and annotations (checks 15 and 16); it does not yet exercise `test: true` types.
+
 | # | Check | Requirements |
 |---|---|---|
 | **Core** | | |
@@ -794,9 +796,11 @@ AI4Enterprise exposes an MCP server at `https://www.ai4enterprise.ca/mcp`. The i
 3. **Transactional (later):** turn the existing booking link into a `book-discovery-call` transaction type, with a `test` counterpart.
 4. Confirm the transport details (Streamable HTTP, CORS, apex-domain redirect, human-readable `GET` page) and publish a conformance report.
 
-### 13.2 Verification boundary
+### 13.2 Verification
 
-The mapping above reflects the tool inventory observed during the initial design review. Wire-level behaviour (headers, redirects, protocol version, CORS) has not yet been verified against this specification. That is the first job for the conformance checker.
+The mapping above reflects the tool inventory observed during the initial design review. Steps 1, 2 and 4 of §13.1 have since been completed. On 2026-11-15, the reference checker ([`tools/conformance/`](tools/conformance/)) passed every check it ran against `https://www.ai4enterprise.ca/mcp`. That run covered Core and the declared `insights` and `service_details` modules, plus the wire-level details: protocol revision, plain-HTTP refusal, CORS and the human-readable page.
+
+The apex-domain redirect (DISC-003) was not verified. `ai4enterprise.ca` uses registrar forwarding, which can't issue a 307 or 308 for POST requests.
 
 ### 13.3 A2A as a complement
 
