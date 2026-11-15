@@ -4,6 +4,9 @@ All notable changes to the MCP Website Profile (MCP-WP) are recorded here.
 
 ## [Unreleased]
 
+- Added a reference conformance checker in `tools/conformance/` (Node.js). It runs the §12 checks for Core and each declared Extended module, validates every result against the schemas, reports against requirement IDs, and enforces request and time budgets. It never calls Transactional tools. Its tests run against a local fixture server.
+- §13.2: recorded that the AI4Enterprise reference implementation now passes the checker, and that DISC-003 (the apex-domain redirect) remains unverified.
+
 - Separate event lifecycle into optional `event_status` in detail and list results, reserving outer `status` for call outcomes. Restore required successful detail fields and correct the duplicate-key example. This changes the draft event field name without an alias (`MCPWP-EVT-001`, `MCPWP-EVT-003`, `MCPWP-RES-001`, `MCPWP-RES-010`, `MCPWP-RES-011`).
 - Require UTC-offset suffixes on event `start` and `end` independently of optional format checkers (`MCPWP-RES-021`); reject duplicate JSON keys in the production schema/example loader.
 - §11.1: added a non-normative note explaining why SEC-001 matters. Every public `/mcp` endpoint feeds text straight into the visiting agent, so all server-supplied strings, including tool descriptions and `instructions`, are data, not instructions. Thanks to Sebastian Mondragon for the framing.

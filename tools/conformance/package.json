@@ -1,0 +1,17 @@
+{
+	"name": "mcpwp-conformance",
+	"private": true,
+	"version": "0.1.0",
+	"description": "Read-only conformance checker for MCP Website Profile (MCP-WP) 0.1 endpoints",
+	"license": "Apache-2.0",
+	"type": "module",
+	"bin": { "mcpwp-conformance": "./conformance.mjs" },
+	"engines": { "node": ">=20" },
+	"scripts": {
+		"check": "node conformance.mjs",
+		"test": "node --test test/conformance.test.mjs"
+	},
+	"dependencies": {
+		"@cfworker/json-schema": "4.1.1"
+	}
+}
