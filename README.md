@@ -1,4 +1,4 @@
-# MCP-WP — MCP Website Profile
+# MCP-WP (MCP Website Profile)
 
 **An open specification defining how websites expose standardised information, capabilities and services to AI agents using the Model Context Protocol.**
 
